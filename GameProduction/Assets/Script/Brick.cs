@@ -114,10 +114,5 @@ public class Brick : MonoBehaviour
         }
     }
 
-    void brickParticles()
-    {
-        
-
-    }
 
 }
