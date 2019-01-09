@@ -12,16 +12,17 @@ public class InstantiateBrick : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(SpawnBricks(2.0f));
         //Instantiate(bricks, transform.position, Quaternion.identity);
         //rb = GetComponent<Rigidbody2D>();
-        Instantiate(bricks, transform.position, Quaternion.identity);
-        rb = GetComponent<Rigidbody2D>();
+        //Instantiate(bricks,new Vector3(0,6,0), Quaternion.identity);
+        //rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);
 
+        //SpawnBricks();
 
         if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
         {
@@ -46,4 +47,19 @@ public class InstantiateBrick : MonoBehaviour
     {
         
     }
+
+    public IEnumerator SpawnBricks(float waitTime)
+    {
+        
+        while (true)
+        {
+
+            Debug.Log("Bam");
+            yield return new WaitForSeconds(waitTime);
+            Instantiate(bricks, new Vector3(0, 6, 0), Quaternion.identity);
+            //rb = GetComponent<Rigidbody2D>();
+            //rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);
+        }
+    }
+
 }

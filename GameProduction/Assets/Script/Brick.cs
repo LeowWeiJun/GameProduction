@@ -68,7 +68,7 @@ public class Brick : MonoBehaviour
         Debug.Log("Collided");
        if(collision.gameObject.name == "Boundary")
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 
