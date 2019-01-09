@@ -9,6 +9,7 @@ public class InstantiateBrick : MonoBehaviour
     private GameObject brickClone;
     public float moveSpeed = 5f;
     public float moveHoriz = 5f;
+    public float spawnSpeed = 2.0f;
     //float directionY;
     Rigidbody2D rb;
     
@@ -17,7 +18,7 @@ public class InstantiateBrick : MonoBehaviour
     void Start()
     {
         Bricks = new List<GameObject>();
-        StartCoroutine(SpawnBricks(1.0f));
+        StartCoroutine(SpawnBricks(spawnSpeed));
 
         colors[0] = Color.white;
         colors[1] = Color.black;

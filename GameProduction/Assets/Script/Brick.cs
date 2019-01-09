@@ -15,7 +15,8 @@ public enum moveDirection
 public class Brick : MonoBehaviour
 {
     private bool dirDown = true;
-    public float speed = 2.0f;
+    public float downSpeed = 2.0f;
+    public float horizSpeed = 4.0f;
     public Rigidbody2D rb;
     //private Vector2 velocity;
     public moveDirection Direction { set; get; }
@@ -73,24 +74,24 @@ public class Brick : MonoBehaviour
 
         if(Direction == moveDirection.Down || InstantiateBrick.Bricks[0].gameObject != gameObject)
         {
-            rb.MovePosition(rb.position + Vector2.down * speed * Time.deltaTime);
+            rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.deltaTime);
         }
         if(Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
-            rb.MovePosition(rb.position + Vector2.left * speed * Time.deltaTime);
+            rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.deltaTime);
         }
         if(Direction == moveDirection.Right && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
-            rb.MovePosition(rb.position + Vector2.right * speed * Time.deltaTime);
+            rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.deltaTime);
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Collided");
-       if(collision.gameObject.name == "Boundary" && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        if (collision.gameObject.name == "Boundary" && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
-            
+
             //Debug.Log(InstantiateBrick.Bricks[0].gameObject);
             Vector3 particlepos = transform.position;
             //particleColor = InstantiateBrick.Bricks[0].GetComponent<Renderer>().material.color;

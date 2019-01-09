@@ -126,7 +126,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &805883416112273412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b97f3e495765a5c47937e51b6860ffd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  downSpeed: 2
+  horizSpeed: 4
   rb: {fileID: 0}
   brickParticle: {fileID: 4038010730091863925, guid: f8633a36ba82b3e449538c2e013cf0b0,
     type: 3}

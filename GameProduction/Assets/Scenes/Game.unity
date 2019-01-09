@@ -248,7 +248,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 3
 --- !u!1 &273569263
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,6 +454,7 @@ MonoBehaviour:
   brick: {fileID: 9198585794113615602, guid: 8858dbfacae0b6d42a8a7b68c3c42117, type: 3}
   moveSpeed: 5
   moveHoriz: 5
+  spawnSpeed: 2
 --- !u!4 &1266127861
 Transform:
   m_ObjectHideFlags: 0
