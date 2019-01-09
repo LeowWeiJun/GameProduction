@@ -11,7 +11,7 @@ public class InstantiateBrick : MonoBehaviour
     public float moveHoriz = 5f;
     //float directionY;
     Rigidbody2D rb;
-
+    
     Color[] colors = new Color[2];
     // Start is called before the first frame update
     void Start()
@@ -46,7 +46,7 @@ public class InstantiateBrick : MonoBehaviour
             //transform.position = new Vector3(Mathf.Clamp(transform.position.x, -10f, 10f), transform.position.y, transform.position.z);
             //rb.velocity = new Vector2(rb.velocity.y, moveHoriz);
             //Debug.Log("Right");
-            rb.AddForce(Vector3.forward * 100f);
+            //rb.AddForce(Vector3.forward * 100f);
         }
         //Destroy(bricks);
     }
@@ -64,9 +64,9 @@ public class InstantiateBrick : MonoBehaviour
 
             //Debug.Log("Bam");
             yield return new WaitForSeconds(waitTime);
-            brickClone = Instantiate(brick, new Vector3(0, 6, 0), Quaternion.identity) as GameObject;
+            brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
             //Instantiate(BrickClone);
-
+            
             int x = Random.Range(0, 1);
             brickClone.GetComponent<Renderer>().material.color = colors[Random.Range(0, colors.Length)];
             Bricks.Add(brickClone);

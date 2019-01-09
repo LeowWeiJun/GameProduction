@@ -21,14 +21,28 @@ public class Brick : MonoBehaviour
     public moveDirection Direction { set; get; }
     // Start is called before the first frame update
 
+    public GameObject brickParticle;
+    public Color particleColor;
+    private ParticleSystem ps;
+    
     //public InstantiateBrick instaScript;
     public GameObject test;
+
+    private void Awake()
+    {
+        //ps = test.GetComponent<ParticleSystem>();
+        //ParticleSystem.MainModule main = ps.main;
+        //main.startColor = gameObject.GetComponent<Renderer>().material.color;
+
+    }
     void Start()
     {
       //  velocity = new Vector2(1.75f, 1.1f);
         rb = gameObject.GetComponent<Rigidbody2D>();
         Direction = moveDirection.Down;
         //instaScript = GetComponent<InstantiateBrick>();
+        
+
     }
 
     void FixedUpdate()
@@ -39,6 +53,7 @@ public class Brick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
         //if (dirDown)
         //  transform.Translate(Vector2.down * speed * Time.deltaTime);
         
@@ -75,10 +90,26 @@ public class Brick : MonoBehaviour
         Debug.Log("Collided");
        if(collision.gameObject.name == "Boundary" && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
+            
             //Debug.Log(InstantiateBrick.Bricks[0].gameObject);
+            Vector3 particlepos = transform.position;
+            //particleColor = InstantiateBrick.Bricks[0].GetComponent<Renderer>().material.color;
             Destroy(InstantiateBrick.Bricks[0].gameObject);
             InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
+
+            GameObject bp = Instantiate(brickParticle, particlepos, Quaternion.identity) as GameObject;
+            //particles.GetComponent<ParticleSystem>().startColor = particleColor;
+
+            ParticleSystem ps = bp.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule psmain = ps.main;
+            psmain.startColor = gameObject.GetComponent<Renderer>().material.color;
         }
+    }
+
+    void brickParticles()
+    {
+        
+
     }
 
 }
