@@ -42,26 +42,29 @@ public class Brick : MonoBehaviour
         //if (dirDown)
         //  transform.Translate(Vector2.down * speed * Time.deltaTime);
         
+        if(InstantiateBrick.Bricks[0].gameObject == gameObject)
+        {
+            if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
+            {
+                Direction = moveDirection.Left;
+                //transform.Translate(Vector2.left * speed * Time.deltaTime);
+            }
+            if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
+            {
+                Direction = moveDirection.Right;
+            }
+        }
         
-        if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
-        {
-            Direction = moveDirection.Left;
-            //transform.Translate(Vector2.left * speed * Time.deltaTime);
-        }
-        if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
-        {
-            Direction = moveDirection.Right;
-        }
 
-        if(Direction == moveDirection.Down)
+        if(Direction == moveDirection.Down || InstantiateBrick.Bricks[0].gameObject != gameObject)
         {
             rb.MovePosition(rb.position + Vector2.down * speed * Time.deltaTime);
         }
-        if(Direction == moveDirection.Left )
+        if(Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
             rb.MovePosition(rb.position + Vector2.left * speed * Time.deltaTime);
         }
-        if(Direction == moveDirection.Right)
+        if(Direction == moveDirection.Right && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
             rb.MovePosition(rb.position + Vector2.right * speed * Time.deltaTime);
         }

@@ -15,7 +15,7 @@ public class InstantiateBrick : MonoBehaviour
     void Start()
     {
         Bricks = new List<GameObject>();
-        StartCoroutine(SpawnBricks(2.0f));
+        StartCoroutine(SpawnBricks(1.0f));
         //Instantiate(bricks, transform.position, Quaternion.identity);
         //rb = GetComponent<Rigidbody2D>();
         //Instantiate(bricks,new Vector3(0,6,0), Quaternion.identity);
