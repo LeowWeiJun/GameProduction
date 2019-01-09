@@ -20,11 +20,15 @@ public class Brick : MonoBehaviour
     //private Vector2 velocity;
     public moveDirection Direction { set; get; }
     // Start is called before the first frame update
+
+    //public InstantiateBrick instaScript;
+    public GameObject test;
     void Start()
     {
       //  velocity = new Vector2(1.75f, 1.1f);
         rb = gameObject.GetComponent<Rigidbody2D>();
         Direction = moveDirection.Down;
+        //instaScript = GetComponent<InstantiateBrick>();
     }
 
     void FixedUpdate()
@@ -53,7 +57,7 @@ public class Brick : MonoBehaviour
         {
             rb.MovePosition(rb.position + Vector2.down * speed * Time.deltaTime);
         }
-        if(Direction == moveDirection.Left)
+        if(Direction == moveDirection.Left )
         {
             rb.MovePosition(rb.position + Vector2.left * speed * Time.deltaTime);
         }
@@ -66,9 +70,11 @@ public class Brick : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Collided");
-       if(collision.gameObject.name == "Boundary")
+       if(collision.gameObject.name == "Boundary" && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
-            //Destroy(gameObject);
+            //Debug.Log(InstantiateBrick.Bricks[0].gameObject);
+            Destroy(InstantiateBrick.Bricks[0].gameObject);
+            InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
         }
     }
 

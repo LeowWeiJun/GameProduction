@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class InstantiateBrick : MonoBehaviour
 {
-    public GameObject bricks = null;
+    public static List<GameObject> Bricks;
+    public GameObject brick;
+    private GameObject brickClone;
     public float moveSpeed = 5f;
     public float moveHoriz = 5f;
     //float directionY;
@@ -12,6 +14,7 @@ public class InstantiateBrick : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Bricks = new List<GameObject>();
         StartCoroutine(SpawnBricks(2.0f));
         //Instantiate(bricks, transform.position, Quaternion.identity);
         //rb = GetComponent<Rigidbody2D>();
@@ -54,11 +57,19 @@ public class InstantiateBrick : MonoBehaviour
         while (true)
         {
 
-            Debug.Log("Bam");
+            //Debug.Log("Bam");
             yield return new WaitForSeconds(waitTime);
-            Instantiate(bricks, new Vector3(0, 6, 0), Quaternion.identity);
+            brickClone = Instantiate(brick, new Vector3(0, 6, 0), Quaternion.identity) as GameObject;
+            //Instantiate(BrickClone);
+            Bricks.Add(brickClone);
             //rb = GetComponent<Rigidbody2D>();
             //rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);
+            //Debug.Log(Bricks);
+            Debug.Log(Bricks[0]);
+            //foreach(var human in Bricks)
+            //{
+            //    Debug.Log(human);
+            //}
         }
     }
 
