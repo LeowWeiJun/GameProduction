@@ -25,6 +25,8 @@ public class Brick : MonoBehaviour
     public GameObject brickParticle;
     public Color particleColor;
     private ParticleSystem ps;
+
+    bool checkSwipe = false;
     
     //public InstantiateBrick instaScript;
     public GameObject test;
@@ -58,16 +60,18 @@ public class Brick : MonoBehaviour
         //if (dirDown)
         //  transform.Translate(Vector2.down * speed * Time.deltaTime);
         
-        if(InstantiateBrick.Bricks[0].gameObject == gameObject)
+        if(InstantiateBrick.Bricks[0].gameObject == gameObject && checkSwipe == false)
         {
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
             {
                 Direction = moveDirection.Left;
+                checkSwipe = true;
                 //transform.Translate(Vector2.left * speed * Time.deltaTime);
             }
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
             {
                 Direction = moveDirection.Right;
+                checkSwipe = true;
             }
         }
         
@@ -75,14 +79,17 @@ public class Brick : MonoBehaviour
         if(Direction == moveDirection.Down || InstantiateBrick.Bricks[0].gameObject != gameObject)
         {
             rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.deltaTime);
+            
         }
-        if(Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        if(Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject )
         {
             rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.deltaTime);
+            
         }
-        if(Direction == moveDirection.Right && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        if(Direction == moveDirection.Right && InstantiateBrick.Bricks[0].gameObject == gameObject )
         {
             rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.deltaTime);
+           
         }
     }
 
