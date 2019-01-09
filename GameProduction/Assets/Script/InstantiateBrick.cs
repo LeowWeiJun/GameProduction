@@ -11,11 +11,16 @@ public class InstantiateBrick : MonoBehaviour
     public float moveHoriz = 5f;
     //float directionY;
     Rigidbody2D rb;
+
+    Color[] colors = new Color[2];
     // Start is called before the first frame update
     void Start()
     {
         Bricks = new List<GameObject>();
         StartCoroutine(SpawnBricks(1.0f));
+
+        colors[0] = Color.white;
+        colors[1] = Color.black;
         //Instantiate(bricks, transform.position, Quaternion.identity);
         //rb = GetComponent<Rigidbody2D>();
         //Instantiate(bricks,new Vector3(0,6,0), Quaternion.identity);
@@ -61,11 +66,14 @@ public class InstantiateBrick : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
             brickClone = Instantiate(brick, new Vector3(0, 6, 0), Quaternion.identity) as GameObject;
             //Instantiate(BrickClone);
+
+            int x = Random.Range(0, 1);
+            brickClone.GetComponent<Renderer>().material.color = colors[Random.Range(0, colors.Length)];
             Bricks.Add(brickClone);
             //rb = GetComponent<Rigidbody2D>();
             //rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);
             //Debug.Log(Bricks);
-            Debug.Log(Bricks[0]);
+            //Debug.Log(Bricks[0]);
             //foreach(var human in Bricks)
             //{
             //    Debug.Log(human);
