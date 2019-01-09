@@ -17,7 +17,7 @@ public class SwipeManager : MonoBehaviour
     public SwipeDirection Direction { set; get; }
     private Vector3 touchPosition;
     private float swipeResistanceX = 50.0f;
-    private float swipeResistanceY = 100.0f;
+    //private float swipeResistanceY = 100.0f;
     // Start is called before the first frame update
     void Start()
     {
