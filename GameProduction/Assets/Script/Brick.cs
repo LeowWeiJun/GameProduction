@@ -27,8 +27,8 @@ public class Brick : MonoBehaviour
     public Color brickColor;
     private ParticleSystem ps;
 
-    bool checkSwipe = false;
-    
+    bool isSwipe;
+    bool isFirst;
     //public InstantiateBrick instaScript;
     public GameObject test;
 
@@ -51,7 +51,9 @@ public class Brick : MonoBehaviour
         //instaScript = GetComponent<InstantiateBrick>();
         brickColor = gameObject.GetComponent<Renderer>().material.color; // check whether white or black
         downSpeed = 30.0f;
-        horizSpeed = 2.0f;
+        horizSpeed = 15.0f;
+        isSwipe = false;
+        isFirst = false;
 
     }
 
@@ -70,19 +72,19 @@ public class Brick : MonoBehaviour
         //rb.velocity = currentVelocity;
 
 
-        if (Direction == moveDirection.Down || InstantiateBrick.Bricks[0].gameObject != gameObject)
+        if (Direction == moveDirection.Down || isFirst != true)//InstantiateBrick.Bricks[0].gameObject != gameObject)
         {
             rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.fixedDeltaTime);
 
         }
-        if (Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        if (Direction == moveDirection.Left && isFirst == true)//InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
             //rb.AddTorque(50.0f);
             rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
             //rb.MoveRotation(rb.rotation + 50.0f * Time.fixedDeltaTime);
 
         }
-        if (Direction == moveDirection.Right && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        if (Direction == moveDirection.Right && isFirst == true)//InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
             rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
 
@@ -91,22 +93,29 @@ public class Brick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        Debug.Log("List Size : " + InstantiateBrick.Bricks.Count);
+        if (isSwipe == true && InstantiateBrick.Bricks.Count > 0 && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        {
+            InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
+            isFirst = true;
+        }
         //if (dirDown)
         //  transform.Translate(Vector2.down * speed * Time.deltaTime);
-        
-        if(InstantiateBrick.Bricks[0].gameObject == gameObject && checkSwipe == false)
+
+        if (InstantiateBrick.Bricks.Count > 0 &&  InstantiateBrick.Bricks[0].gameObject == gameObject && isSwipe == false)
         {
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
             {
                 Direction = moveDirection.Left;
-                checkSwipe = true;
+                isSwipe = true;
+                CheckFirst();
                 //transform.Translate(Vector2.left * speed * Time.deltaTime);
             }
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
             {
                 Direction = moveDirection.Right;
-                checkSwipe = true;
+                isSwipe = true;
+                CheckFirst();
             }
         }
         
@@ -116,16 +125,16 @@ public class Brick : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collided");
+        
         rb.velocity = new Vector3(0, 0,0);
-        if (collision.gameObject.name == "Boundary" && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        if (collision.gameObject.name == "Boundary" && isFirst == true)
         {
-
+            Debug.Log("Collided");
             //Debug.Log(InstantiateBrick.Bricks[0].gameObject);
             Vector3 particlepos = transform.position;
             //particleColor = InstantiateBrick.Bricks[0].GetComponent<Renderer>().material.color;
-            Destroy(InstantiateBrick.Bricks[0].gameObject);
-            InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
+            Destroy(gameObject);
+            //InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
 
             GameObject bp = Instantiate(brickParticle, particlepos, Quaternion.identity) as GameObject;
             //particles.GetComponent<ParticleSystem>().startColor = particleColor;
@@ -145,6 +154,11 @@ public class Brick : MonoBehaviour
 
             
         }
+    }
+
+    void CheckFirst()
+    {
+        
     }
 
 
