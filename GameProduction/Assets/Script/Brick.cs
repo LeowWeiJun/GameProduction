@@ -100,7 +100,7 @@ public class Brick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("List Size : " + InstantiateBrick.Bricks.Count);
+        //Debug.Log("List Size : " + InstantiateBrick.Bricks.Count);
 
         //if (dirDown)
         //  transform.Translate(Vector2.down * speed * Time.deltaTime);
