@@ -16,7 +16,7 @@ public class Brick : MonoBehaviour
 {
     private bool dirDown = true;
     public float downSpeed = 2.0f;
-    public float horizSpeed = 4.0f;
+    public float horizSpeed = 600.0f;
     public Rigidbody2D rb;
     //private Vector2 velocity;
     public moveDirection Direction { set; get; }
@@ -30,6 +30,10 @@ public class Brick : MonoBehaviour
     
     //public InstantiateBrick instaScript;
     public GameObject test;
+
+
+    float damp = 0.1f;
+
 
     private void Awake()
     {
@@ -51,8 +55,36 @@ public class Brick : MonoBehaviour
 
     void FixedUpdate()
     {
+        rb.velocity = Vector3.Scale(rb.velocity, new Vector3(1, 1 - damp, 1));
         //rb.MovePosition(rb.position + Vector2.down *speed* Time.deltaTime);
         //Debug.Log("Heh");
+        //var currentVelocity = rb.velocity;
+
+        //if (currentVelocity.y <= 0f)
+        //    return;
+
+        //currentVelocity.y = 0f;
+
+        //rb.velocity = currentVelocity;
+
+
+        if (Direction == moveDirection.Down || InstantiateBrick.Bricks[0].gameObject != gameObject)
+        {
+            rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.deltaTime);
+
+        }
+        if (Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        {
+            rb.AddTorque(50.0f);
+            rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.deltaTime);
+            //rb.MoveRotation(rb.rotation + 50.0f * Time.fixedDeltaTime);
+
+        }
+        if (Direction == moveDirection.Right && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        {
+            rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.deltaTime);
+
+        }
     }
     // Update is called once per frame
     void Update()
@@ -77,26 +109,13 @@ public class Brick : MonoBehaviour
         }
         
 
-        if(Direction == moveDirection.Down || InstantiateBrick.Bricks[0].gameObject != gameObject)
-        {
-            rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.deltaTime);
-            
-        }
-        if(Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject )
-        {
-            rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.deltaTime);
-            
-        }
-        if(Direction == moveDirection.Right && InstantiateBrick.Bricks[0].gameObject == gameObject )
-        {
-            rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.deltaTime);
-           
-        }
+       
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Collided");
+        rb.velocity = new Vector3(0, 0,0);
         if (collision.gameObject.name == "Boundary" && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
 
