@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class PauseMenu : MonoBehaviour
 {
     bool isPaused;
     public GameObject pauseMenuCanvas;
     // Start is called before the first frame update
+
+    
+
     void Start()
     {
         isPaused = false;
+        
     }
 
     // Update is called once per frame
@@ -37,4 +42,11 @@ public class PauseMenu : MonoBehaviour
     {
         isPaused = false;
     }
+
+    public void Home()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+
+    
 }
