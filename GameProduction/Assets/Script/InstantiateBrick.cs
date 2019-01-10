@@ -9,16 +9,19 @@ public class InstantiateBrick : MonoBehaviour
     private GameObject brickClone;
     public float moveSpeed = 5f;
     public float moveHoriz = 5f;
-    public float spawnSpeed = 2.0f;
+    public float spawnSpeed = 0.5f;
     //float directionY;
     Rigidbody2D rb;
-    
+
+    int counter = 10;
     Color[] colors = new Color[2];
     // Start is called before the first frame update
     void Start()
     {
         Bricks = new List<GameObject>();
+        
         StartCoroutine(SpawnBricks(spawnSpeed));
+        
 
         colors[0] = Color.white;
         colors[1] = Color.black;
@@ -60,7 +63,7 @@ public class InstantiateBrick : MonoBehaviour
     public IEnumerator SpawnBricks(float waitTime)
     {
         
-        while (true)
+        while (counter != 0)
         {
 
             //Debug.Log("Bam");
@@ -79,6 +82,8 @@ public class InstantiateBrick : MonoBehaviour
             //{
             //    Debug.Log(human);
             //}
+            counter--;
+
         }
     }
 

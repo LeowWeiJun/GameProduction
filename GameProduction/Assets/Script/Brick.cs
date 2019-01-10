@@ -15,8 +15,9 @@ public enum moveDirection
 public class Brick : MonoBehaviour
 {
     private bool dirDown = true;
-    public float downSpeed = 2.0f;
+    public float downSpeed = 200.0f;
     public float horizSpeed = 600.0f;
+    Vector2 velocity2 = new Vector2(30f,30f);
     public Rigidbody2D rb;
     //private Vector2 velocity;
     public moveDirection Direction { set; get; }
@@ -70,19 +71,19 @@ public class Brick : MonoBehaviour
 
         if (Direction == moveDirection.Down || InstantiateBrick.Bricks[0].gameObject != gameObject)
         {
-            rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.deltaTime);
+            rb.MovePosition(rb.position + Vector2.down * velocity2 * Time.fixedDeltaTime);
 
         }
         if (Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
-            rb.AddTorque(50.0f);
-            rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.deltaTime);
+            //rb.AddTorque(50.0f);
+            rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
             //rb.MoveRotation(rb.rotation + 50.0f * Time.fixedDeltaTime);
 
         }
         if (Direction == moveDirection.Right && InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
-            rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.deltaTime);
+            rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
 
         }
     }
