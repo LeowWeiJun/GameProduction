@@ -50,7 +50,7 @@ public class Brick : MonoBehaviour
         Direction = moveDirection.Down;
         //instaScript = GetComponent<InstantiateBrick>();
         brickColor = gameObject.GetComponent<Renderer>().material.color; // check whether white or black
-        downSpeed = 5.0f;
+        downSpeed = 30.0f;
         horizSpeed = 15.0f;
         isSwipe = false;
         isFirst = false;
