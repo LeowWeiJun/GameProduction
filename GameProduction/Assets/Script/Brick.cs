@@ -23,7 +23,7 @@ public class Brick : MonoBehaviour
     // Start is called before the first frame update
 
     public GameObject brickParticle;
-    public Color particleColor;
+    public Color brickColor;
     private ParticleSystem ps;
 
     bool checkSwipe = false;
@@ -44,7 +44,8 @@ public class Brick : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         Direction = moveDirection.Down;
         //instaScript = GetComponent<InstantiateBrick>();
-        
+        brickColor = gameObject.GetComponent<Renderer>().material.color; // check whether white or black
+
 
     }
 
@@ -110,7 +111,18 @@ public class Brick : MonoBehaviour
 
             ParticleSystem ps = bp.GetComponent<ParticleSystem>();
             ParticleSystem.MainModule psmain = ps.main;
-            psmain.startColor = gameObject.GetComponent<Renderer>().material.color;
+            psmain.startColor = brickColor;
+
+            if(Direction == moveDirection.Left && brickColor != Color.white || Direction == moveDirection.Right && brickColor != Color.black)
+            {
+                psmain.startColor = Color.red;
+            }
+            else
+            {
+                Score.scoreValue++;
+            }
+
+            
         }
     }
 
