@@ -19,7 +19,7 @@ public class InstantiateBrick : MonoBehaviour
     void Start()
     {
         Bricks = new List<GameObject>();
-        spawnSpeed = 0.15f;
+        spawnSpeed = 2.0f;//0.15f;
         StartCoroutine(SpawnBricks(spawnSpeed));
         Debug.Log("Spawnspd : " + spawnSpeed);
 
@@ -63,7 +63,7 @@ public class InstantiateBrick : MonoBehaviour
     public IEnumerator SpawnBricks(float waitTime)
     {
         
-        while (counter != 0)
+        while (true)//counter != 0)
         {
 
             //Debug.Log("Bam");

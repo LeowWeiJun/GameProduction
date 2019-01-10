@@ -50,7 +50,7 @@ public class Brick : MonoBehaviour
         Direction = moveDirection.Down;
         //instaScript = GetComponent<InstantiateBrick>();
         brickColor = gameObject.GetComponent<Renderer>().material.color; // check whether white or black
-        downSpeed = 30.0f;
+        downSpeed = 5.0f;
         horizSpeed = 15.0f;
         isSwipe = false;
         isFirst = false;
@@ -70,57 +70,60 @@ public class Brick : MonoBehaviour
         //currentVelocity.y = 0f;
 
         //rb.velocity = currentVelocity;
-
+        if (isSwipe == true && InstantiateBrick.Bricks.Count > 0 && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        {
+            InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
+            isFirst = true;
+            SwipeManager.Instance.Direction = SwipeDirection.None;
+        }
 
         if (Direction == moveDirection.Down || isFirst != true)//InstantiateBrick.Bricks[0].gameObject != gameObject)
         {
             rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.fixedDeltaTime);
 
         }
-        if (Direction == moveDirection.Left && isFirst == true)//InstantiateBrick.Bricks[0].gameObject == gameObject)
+        else if (Direction == moveDirection.Left && isFirst == true)//InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
             //rb.AddTorque(50.0f);
             rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
             //rb.MoveRotation(rb.rotation + 50.0f * Time.fixedDeltaTime);
 
         }
-        if (Direction == moveDirection.Right && isFirst == true)//InstantiateBrick.Bricks[0].gameObject == gameObject)
+        else if (Direction == moveDirection.Right && isFirst == true)//InstantiateBrick.Bricks[0].gameObject == gameObject)
         {
             rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
 
         }
+
+        
     }
     // Update is called once per frame
     void Update()
     {
         Debug.Log("List Size : " + InstantiateBrick.Bricks.Count);
-        if (isSwipe == true && InstantiateBrick.Bricks.Count > 0 && InstantiateBrick.Bricks[0].gameObject == gameObject)
-        {
-            InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
-            isFirst = true;
-        }
+
         //if (dirDown)
         //  transform.Translate(Vector2.down * speed * Time.deltaTime);
 
-        if (InstantiateBrick.Bricks.Count > 0 &&  InstantiateBrick.Bricks[0].gameObject == gameObject && isSwipe == false)
+
+
+
+        if (InstantiateBrick.Bricks.Count > 0 && InstantiateBrick.Bricks[0].gameObject == gameObject && isSwipe == false)
         {
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
             {
                 Direction = moveDirection.Left;
                 isSwipe = true;
-                CheckFirst();
+                //CheckFirst();
                 //transform.Translate(Vector2.left * speed * Time.deltaTime);
             }
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
             {
                 Direction = moveDirection.Right;
                 isSwipe = true;
-                CheckFirst();
+                //CheckFirst();
             }
         }
-        
-
-       
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -156,10 +159,10 @@ public class Brick : MonoBehaviour
         }
     }
 
-    void CheckFirst()
-    {
+    //void CheckFirst()
+    //{
         
-    }
+    //}
 
 
 }

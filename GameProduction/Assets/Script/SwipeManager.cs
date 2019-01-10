@@ -17,12 +17,14 @@ public class SwipeManager : MonoBehaviour
     public SwipeDirection Direction { set; get; }
     private Vector3 touchPosition;
     private float swipeResistanceX = 50.0f;
+
+    bool swipeCounter;
     //private float swipeResistanceY = 100.0f;
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
-
+        swipeCounter = false;
     }
 
     // Update is called once per frame
@@ -32,21 +34,25 @@ public class SwipeManager : MonoBehaviour
         //Debug.Log("Direction : " + Direction);
         if (Input.GetMouseButtonDown(0))
         {
+            swipeCounter = false;
             touchPosition = Input.mousePosition;
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
         {
             Vector2 deltaSwipe = touchPosition - Input.mousePosition;
 
             if(Mathf.Abs(deltaSwipe.x) > swipeResistanceX)
             {
-                Direction |= (deltaSwipe.x < 0) ? SwipeDirection.Right : SwipeDirection.Left;
-                Input.ResetInputAxes();
+                if(swipeCounter == false)
+                    Direction |= (deltaSwipe.x < 0) ? SwipeDirection.Right : SwipeDirection.Left;
+                //Input.ResetInputAxes();
+
+                swipeCounter = true;
             }
 
 
-
+            
         }
     }
 
