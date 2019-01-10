@@ -14,10 +14,10 @@ public enum moveDirection
 
 public class Brick : MonoBehaviour
 {
-    private bool dirDown = true;
-    public float downSpeed = 200.0f;
-    public float horizSpeed = 600.0f;
-    Vector2 velocity2 = new Vector2(30f,30f);
+    //private bool dirDown = true;
+    public float downSpeed;
+    public float horizSpeed;
+    //Vector2 velocity2 = new Vector2(30f,30f);
     public Rigidbody2D rb;
     //private Vector2 velocity;
     public moveDirection Direction { set; get; }
@@ -50,7 +50,8 @@ public class Brick : MonoBehaviour
         Direction = moveDirection.Down;
         //instaScript = GetComponent<InstantiateBrick>();
         brickColor = gameObject.GetComponent<Renderer>().material.color; // check whether white or black
-
+        downSpeed = 30.0f;
+        horizSpeed = 15.0f;
 
     }
 
@@ -71,7 +72,7 @@ public class Brick : MonoBehaviour
 
         if (Direction == moveDirection.Down || InstantiateBrick.Bricks[0].gameObject != gameObject)
         {
-            rb.MovePosition(rb.position + Vector2.down * velocity2 * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.fixedDeltaTime);
 
         }
         if (Direction == moveDirection.Left && InstantiateBrick.Bricks[0].gameObject == gameObject)
