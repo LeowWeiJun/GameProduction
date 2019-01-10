@@ -25,8 +25,8 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         exitCount = 0;
-        SFXcount = 0;
-        BGMcount = 0;
+        SFXcount = 1;
+        BGMcount = 1;
     }
 
     // Update is called once per frame
