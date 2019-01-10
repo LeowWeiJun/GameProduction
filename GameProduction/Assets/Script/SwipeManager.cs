@@ -35,13 +35,14 @@ public class SwipeManager : MonoBehaviour
             touchPosition = Input.mousePosition;
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButton(0))
         {
             Vector2 deltaSwipe = touchPosition - Input.mousePosition;
 
             if(Mathf.Abs(deltaSwipe.x) > swipeResistanceX)
             {
                 Direction |= (deltaSwipe.x < 0) ? SwipeDirection.Right : SwipeDirection.Left;
+                Input.ResetInputAxes();
             }
 
 
