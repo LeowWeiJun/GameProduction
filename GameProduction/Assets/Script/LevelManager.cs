@@ -11,7 +11,7 @@ public class LevelManager : MonoBehaviour
     public TextMeshProUGUI levelText;
     public GameObject levelImage;
     private int level;
-    private int completelevel;
+    public static int completelevel;
     public static bool doingSetup;
     // Start is called before the first frame update
 
@@ -21,7 +21,7 @@ public class LevelManager : MonoBehaviour
 
 
     public static List<GameObject> Bricks;
-    public GameObject brick;
+    public GameObject brick;  
     private GameObject brickClone;
     public float spawnSpeed;
     //float directionY;
@@ -30,6 +30,9 @@ public class LevelManager : MonoBehaviour
     static int initialBricks = 1;
     int counter;
     Color[] colors = new Color[2];
+
+
+    public GameObject progressBar;
 
     private void Awake()
     {
@@ -40,6 +43,7 @@ public class LevelManager : MonoBehaviour
     }
     void Start()
     {
+        progressBar = GameObject.Find("ProgressBar");
         Bricks = new List<GameObject>();
         spawnSpeed = 0.15f;
         colors[0] = Color.white;
@@ -56,6 +60,7 @@ public class LevelManager : MonoBehaviour
 
     void InitGame()
     {
+        progressBar.SetActive(true);
         counter = initialBricks;
         doingSetup = true;
         //levelImage = GameObject.Find("LevelImage");
@@ -69,6 +74,7 @@ public class LevelManager : MonoBehaviour
     private void HideLevelImage()
     {
         //Debug.Log("HELLO WORLD");
+        
         levelImage.SetActive(false);
         doingSetup = false;
         //Time.timeScale = 1f;
@@ -85,6 +91,7 @@ public class LevelManager : MonoBehaviour
         if (GameObject.FindGameObjectWithTag("Brick") == null && counter == 0)
         {
             Debug.Log("NO BRICKS");
+            completelevel++;
             OnLoadNewLevel();
         }
             
@@ -97,6 +104,12 @@ public class LevelManager : MonoBehaviour
         {
             EventNo = Random.Range(0, 1);
             EventHandle(EventNo);
+
+            ProgressBar.ResetTime();
+            //progressBar.SetActive(false);
+            //progressBar.SetActive(true);
+            //progressBar.GetComponent<ProgressBar>().enabled = false;
+            //progressBar.GetComponent<ProgressBar>().enabled = true;
         }
 
         level++;

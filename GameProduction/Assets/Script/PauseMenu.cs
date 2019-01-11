@@ -23,13 +23,17 @@ public class PauseMenu : MonoBehaviour
     {
         if (isPaused)
         {
+            //Debug.Log("Paused");
             pauseMenuCanvas.SetActive(true);
             Time.timeScale = 0.0f;
+            //Debug.Log(Time.timeScale);
         }
         else
         {
+            //Debug.Log("UnPaused");
             pauseMenuCanvas.SetActive(false);
             Time.timeScale = 1.0f;
+            //Debug.Log(Time.timeScale);
         }
 
         if (Input.GetKeyUp(KeyCode.Escape))

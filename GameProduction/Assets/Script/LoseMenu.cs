@@ -25,11 +25,7 @@ public class LoseMenu : MonoBehaviour
             loseMenuCanvas.SetActive(true);
             Time.timeScale = 0.0f;
         }
-        else
-        {
-            loseMenuCanvas.SetActive(false);
-            Time.timeScale = 1.0f;
-        }
+       
 
         //if (Input.GetKeyUp(KeyCode.Escape))
         //{

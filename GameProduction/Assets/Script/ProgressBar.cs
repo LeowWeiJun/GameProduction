@@ -8,10 +8,11 @@ public class ProgressBar : MonoBehaviour
 {
     
     public Image progressBar;
-    float timeAmt;
-    float time;
+    static float timeAmt;
+    static float time;
 
     public static bool isTimeUp;
+    public static float initialTime = 25;
 
     public TextMeshProUGUI timeText;
     //[SerializeField]private float currentAmount;
@@ -19,7 +20,7 @@ public class ProgressBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timeAmt = 25;
+        timeAmt = initialTime;
         //progressBar = this.GetComponent<Image>();
         time = timeAmt;
         isTimeUp = false;
@@ -42,5 +43,11 @@ public class ProgressBar : MonoBehaviour
             isTimeUp = true;
         }
         
+    }
+
+    public static void ResetTime()
+    {
+        timeAmt = initialTime;
+        time = timeAmt;
     }
 }
