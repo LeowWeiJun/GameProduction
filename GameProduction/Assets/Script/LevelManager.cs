@@ -16,7 +16,8 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
 
 
-    public static int Life = 1;
+    public static int initialLife = 1;
+    public static int Life;
     int EventNo;
 
 
@@ -27,15 +28,16 @@ public class LevelManager : MonoBehaviour
     //float directionY;
     Rigidbody2D rb;
 
-    static int initialBricks = 1;
+    public static int initialBricks = 8;
     int counter;
     Color[] colors = new Color[2];
 
 
     public GameObject progressBar;
-
+    //public GameObject powerUP;
     private void Awake()
     {
+        Life = initialLife;
         level = 1;
         completelevel = 0;
         levelStartDelay = 2.0f;
@@ -102,10 +104,13 @@ public class LevelManager : MonoBehaviour
     {
         if(level % 5 == 0)
         {
+            PowerUPSelection.isSelect = true;
+            //powerUP.SetActive(true);
+            Time.timeScale = 0.0f;
             EventNo = Random.Range(0, 1);
             EventHandle(EventNo);
 
-            ProgressBar.ResetTime();
+            
             //progressBar.SetActive(false);
             //progressBar.SetActive(true);
             //progressBar.GetComponent<ProgressBar>().enabled = false;

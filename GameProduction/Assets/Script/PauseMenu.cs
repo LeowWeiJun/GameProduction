@@ -28,7 +28,7 @@ public class PauseMenu : MonoBehaviour
             Time.timeScale = 0.0f;
             //Debug.Log(Time.timeScale);
         }
-        else
+        else if(isPaused != true && PowerUPSelection.isSelect != true)
         {
             //Debug.Log("UnPaused");
             pauseMenuCanvas.SetActive(false);
