@@ -29,7 +29,7 @@ public class Brick : MonoBehaviour
 
     bool isSwipe;
     bool isFirst;
-    //public InstantiateBrick instaScript;
+    //public LevelManager instaScript;
     public GameObject test;
 
 
@@ -48,7 +48,7 @@ public class Brick : MonoBehaviour
       //  velocity = new Vector2(1.75f, 1.1f);
         rb = gameObject.GetComponent<Rigidbody2D>();
         Direction = moveDirection.Down;
-        //instaScript = GetComponent<InstantiateBrick>();
+        //instaScript = GetComponent<LevelManager>();
         brickColor = gameObject.GetComponent<Renderer>().material.color; // check whether white or black
         downSpeed = 30.0f;
         horizSpeed = 15.0f;
@@ -70,26 +70,26 @@ public class Brick : MonoBehaviour
         //currentVelocity.y = 0f;
 
         //rb.velocity = currentVelocity;
-        if (isSwipe == true && InstantiateBrick.Bricks.Count > 0 && InstantiateBrick.Bricks[0].gameObject == gameObject)
+        if (isSwipe == true && LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject)
         {
-            InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
+            LevelManager.Bricks.Remove(LevelManager.Bricks[0]);
             isFirst = true;
             SwipeManager.Instance.Direction = SwipeDirection.None;
         }
 
-        if (Direction == moveDirection.Down || isFirst != true)//InstantiateBrick.Bricks[0].gameObject != gameObject)
+        if (Direction == moveDirection.Down || isFirst != true)//LevelManager.Bricks[0].gameObject != gameObject)
         {
             rb.MovePosition(rb.position + Vector2.down * downSpeed * Time.fixedDeltaTime);
 
         }
-        else if (Direction == moveDirection.Left && isFirst == true)//InstantiateBrick.Bricks[0].gameObject == gameObject)
+        else if (Direction == moveDirection.Left && isFirst == true)//LevelManager.Bricks[0].gameObject == gameObject)
         {
             //rb.AddTorque(50.0f);
             rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
             //rb.MoveRotation(rb.rotation + 50.0f * Time.fixedDeltaTime);
 
         }
-        else if (Direction == moveDirection.Right && isFirst == true)//InstantiateBrick.Bricks[0].gameObject == gameObject)
+        else if (Direction == moveDirection.Right && isFirst == true)//LevelManager.Bricks[0].gameObject == gameObject)
         {
             rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
 
@@ -100,7 +100,7 @@ public class Brick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("List Size : " + InstantiateBrick.Bricks.Count);
+        //Debug.Log("List Size : " + LevelManager.Bricks.Count);
 
         //if (dirDown)
         //  transform.Translate(Vector2.down * speed * Time.deltaTime);
@@ -108,7 +108,7 @@ public class Brick : MonoBehaviour
 
 
 
-        if (InstantiateBrick.Bricks.Count > 0 && InstantiateBrick.Bricks[0].gameObject == gameObject && isSwipe == false)
+        if (LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject && isSwipe == false)
         {
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
             {
@@ -133,11 +133,11 @@ public class Brick : MonoBehaviour
         if (collision.gameObject.name == "Boundary" && isFirst == true)
         {
             Debug.Log("Collided");
-            //Debug.Log(InstantiateBrick.Bricks[0].gameObject);
+            //Debug.Log(LevelManager.Bricks[0].gameObject);
             Vector3 particlepos = transform.position;
-            //particleColor = InstantiateBrick.Bricks[0].GetComponent<Renderer>().material.color;
+            //particleColor = LevelManager.Bricks[0].GetComponent<Renderer>().material.color;
             Destroy(gameObject);
-            //InstantiateBrick.Bricks.Remove(InstantiateBrick.Bricks[0]);
+            //LevelManager.Bricks.Remove(LevelManager.Bricks[0]);
 
             GameObject bp = Instantiate(brickParticle, particlepos, Quaternion.identity) as GameObject;
             //particles.GetComponent<ParticleSystem>().startColor = particleColor;

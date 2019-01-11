@@ -7,8 +7,6 @@ public class InstantiateBrick : MonoBehaviour
     public static List<GameObject> Bricks;
     public GameObject brick;
     private GameObject brickClone;
-    public float moveSpeed = 5f;
-    public float moveHoriz = 5f;
     public float spawnSpeed;
     //float directionY;
     Rigidbody2D rb;
@@ -19,7 +17,9 @@ public class InstantiateBrick : MonoBehaviour
     void Start()
     {
         Bricks = new List<GameObject>();
+
         spawnSpeed = 0.15f;
+        Debug.Log("Spawnspd : " + spawnSpeed);
         StartCoroutine(SpawnBricks(spawnSpeed));
         Debug.Log("Spawnspd : " + spawnSpeed);
 
@@ -58,14 +58,18 @@ public class InstantiateBrick : MonoBehaviour
     void Update()
     {
         
+
     }
 
     public IEnumerator SpawnBricks(float waitTime)
     {
-        
-        while (counter != 0)
-        {
 
+        Debug.Log(LevelManager.doingSetup);
+        
+
+        if (counter != 0 )
+        {
+            Debug.Log("Hello");
             //Debug.Log("Bam");
             yield return new WaitForSeconds(waitTime);
             brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;

@@ -27,8 +27,10 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (LevelManager.doingSetup)
+            return;
 
-        if(time > 0)
+        if (time > 0)
         {
             time -= Time.deltaTime;
             progressBar.GetComponent<Image>().fillAmount = time / timeAmt;
