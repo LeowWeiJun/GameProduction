@@ -40,7 +40,7 @@ public class LoseMenu : MonoBehaviour
     public void ResetGame()
     {
         LevelManager.Life = 1;
-        LevelManager.initialBricks = 8;
+        LevelManager.initialBricks = 8; 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

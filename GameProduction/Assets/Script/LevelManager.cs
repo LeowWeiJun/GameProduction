@@ -32,6 +32,7 @@ public class LevelManager : MonoBehaviour
     int counter;
     Color[] colors = new Color[2];
 
+     
 
     public GameObject progressBar;
     //public GameObject powerUP;
@@ -45,6 +46,8 @@ public class LevelManager : MonoBehaviour
     }
     void Start()
     {
+
+        
         progressBar = GameObject.Find("ProgressBar");
         Bricks = new List<GameObject>();
         spawnSpeed = 0.15f;
@@ -87,6 +90,8 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
         if (doingSetup)
             return;
 
