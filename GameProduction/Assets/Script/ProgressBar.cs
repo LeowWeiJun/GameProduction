@@ -8,7 +8,7 @@ public class ProgressBar : MonoBehaviour
 {
     
     public Image progressBar;
-    float timeAmt = 5;
+    float timeAmt;
     float time;
 
     public static bool isTimeUp;
@@ -19,6 +19,7 @@ public class ProgressBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        timeAmt = 25;
         //progressBar = this.GetComponent<Image>();
         time = timeAmt;
         isTimeUp = false;

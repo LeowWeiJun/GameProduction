@@ -149,6 +149,7 @@ public class Brick : MonoBehaviour
             if(Direction == moveDirection.Left && brickColor != Color.white || Direction == moveDirection.Right && brickColor != Color.black)
             {
                 psmain.startColor = Color.red;
+                LevelManager.Life--;
             }
             else
             {

@@ -7,7 +7,7 @@ using TMPro;
 public class LevelManager : MonoBehaviour
 {
     public float levelStartDelay;
-
+    
     public TextMeshProUGUI levelText;
     public GameObject levelImage;
     private int level;
@@ -16,8 +16,8 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
 
 
-
-
+    public static int Life = 1;
+    int EventNo;
 
 
     public static List<GameObject> Bricks;
@@ -27,7 +27,8 @@ public class LevelManager : MonoBehaviour
     //float directionY;
     Rigidbody2D rb;
 
-    int counter = 10;
+    static int initialBricks = 1;
+    int counter;
     Color[] colors = new Color[2];
 
     private void Awake()
@@ -55,11 +56,7 @@ public class LevelManager : MonoBehaviour
 
     void InitGame()
     {
-        //if (GameObject.Find("LevelText") != null)
-        //{
-        //    //it exists
-        //    Debug.Log("EXIST");
-        //}
+        counter = initialBricks;
         doingSetup = true;
         //levelImage = GameObject.Find("LevelImage");
         //levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
@@ -96,6 +93,12 @@ public class LevelManager : MonoBehaviour
 
     void OnLoadNewLevel()
     {
+        if(level % 5 == 0)
+        {
+            EventNo = Random.Range(0, 1);
+            EventHandle(EventNo);
+        }
+
         level++;
         counter = 10;
         InitGame();
@@ -127,6 +130,14 @@ public class LevelManager : MonoBehaviour
             //}
             counter--;
 
+        }
+    }
+
+    public void EventHandle(int EventNo)
+    {
+        if(EventNo == 0)
+        {
+            initialBricks++;
         }
     }
 

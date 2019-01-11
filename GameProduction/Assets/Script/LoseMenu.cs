@@ -35,7 +35,7 @@ public class LoseMenu : MonoBehaviour
         //{
         //    isLose = !isLose;
         //}
-        if(ProgressBar.isTimeUp == true)
+        if(ProgressBar.isTimeUp == true || LevelManager.Life == 0)
         {
             isLose = true;
         }
@@ -43,6 +43,7 @@ public class LoseMenu : MonoBehaviour
 
     public void ResetGame()
     {
+        LevelManager.Life = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

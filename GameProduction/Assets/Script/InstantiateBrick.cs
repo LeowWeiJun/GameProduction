@@ -5,6 +5,7 @@ using UnityEngine;
 public class InstantiateBrick : MonoBehaviour
 {
     public static List<GameObject> Bricks;
+    
     public GameObject brick;
     private GameObject brickClone;
     public float spawnSpeed;
