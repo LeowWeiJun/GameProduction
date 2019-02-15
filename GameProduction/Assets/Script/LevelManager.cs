@@ -43,8 +43,8 @@ public class LevelManager : MonoBehaviour
     public static int wrongCounter = 0;
     Color[] colors = new Color[2];
 
-
-   // public static bool Touching = false;
+    public static bool ReverseColor = false;
+    // public static bool Touching = false;
     public GameObject progressBar;
     //public GameObject powerUP;
     private void Awake()
@@ -95,6 +95,7 @@ public class LevelManager : MonoBehaviour
         doingSetup = false;
         //Time.timeScale = 1f;
         StartCoroutine(SpawnBricks(spawnSpeed));
+        StartCoroutine(Mistake());
 
     }
 
@@ -116,14 +117,15 @@ public class LevelManager : MonoBehaviour
             completelevel++;
             OnLoadNewLevel();
         }
-
+        //Debug.Log(Brick.isWrong);
+        //Mistake();
         //if(Brick.isWrong == true)
         //{
         //    Brick.isWrong = false;
         //    instantiateBricks();
         //    instantiateBricks();
         //}
-            
+
 
     }
 
@@ -178,47 +180,11 @@ public class LevelManager : MonoBehaviour
 
         while (counter == 0 && LoseMenu.isLose != true)
         {
-            //Debug.Log("Hello");
+            
 
-            //rb = GetComponent<Rigidbody2D>();
-            //rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);
-            //Debug.Log(Bricks);
-            //Debug.Log(Bricks[0]);
-            //foreach(var human in Bricks)
-            //{
-            //    Debug.Log(human);
-            //}
+                //yield return new WaitForSeconds(20f);
+                //instantiateBricks();
 
-
-            if (wrongCounter != 0 && Brick.isWrong == true)
-            {
-                Debug.Log("Wrong");
-                yield return new WaitForSeconds(0.15f);
-
-                instantiateBricks();
-                wrongCounter--;
-
-                if (wrongCounter == 0)
-                {
-                    Brick.isWrong = false;
-                }
-                if (wrongCounter % 2 == 0)
-                {
-                    //Brick.isWrong = false;
-                    yield return new WaitForSeconds(0.5f);
-                }
-                
-                    
-            }
-            else if (Brick.isWrong == false)
-            {
-                Debug.Log("Normal");
-                yield return new WaitForSeconds(0.2f);
-                instantiateBricks();
-                //yield return new WaitForSeconds(2f);
-
-            }
- 
         }
 
         
@@ -232,15 +198,15 @@ public class LevelManager : MonoBehaviour
 
             if ((x -= WhiteChance) < 0)
             {
-                brickClone = Instantiate(whiteBrick, new Vector3(0, 300, -1), Quaternion.identity) as GameObject;
+                brickClone = Instantiate(whiteBrick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
             }
             else if ((x -= BlackChance) < 0)
             {
-                brickClone = Instantiate(blackBrick, new Vector3(0, 300, -1), Quaternion.identity) as GameObject;
+                brickClone = Instantiate(blackBrick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
             }
             else
             {
-                brickClone = Instantiate(skullBrick, new Vector3(0, 300, -1), Quaternion.identity) as GameObject;
+                brickClone = Instantiate(skullBrick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
             }
             //brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
             ////Instantiate(BrickClone);
@@ -250,11 +216,25 @@ public class LevelManager : MonoBehaviour
             Bricks.Add(brickClone);
     }
 
-    public void Mistake()
+    public IEnumerator Mistake()
     {
-        for (int i = 0; i<2; i++)
+        while(true)
         {
+            yield return new WaitForSeconds(0.15f);
+            while (Brick.isWrong == true)
+            {
+                
 
+                instantiateBricks();
+                wrongCounter--;
+                Debug.Log(wrongCounter);
+                if (wrongCounter == 0)
+                {
+                    Brick.isWrong = false;
+
+                }
+            }
+            
         }
     }
 

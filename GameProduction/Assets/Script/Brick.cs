@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 
 public enum moveDirection
@@ -35,8 +36,8 @@ public class Brick : MonoBehaviour
     public static bool isWrong = false; 
     float damp = 0.1f;
 
-    
 
+    
     private void Awake()
     {
         //ps = test.GetComponent<ParticleSystem>();
@@ -77,6 +78,36 @@ public class Brick : MonoBehaviour
             LevelManager.Bricks.Remove(LevelManager.Bricks[0]);
             isFirst = true;
             SwipeManager.Instance.Direction = SwipeDirection.None;
+        }
+
+        if (LevelManager.ReverseColor)
+        {
+            if (LevelManager.Bricks[LevelManager.Bricks.Count - 1].gameObject == gameObject)
+            {
+                LevelManager.ReverseColor = false;
+            }
+            GameObject child = gameObject.transform.FindObjectsWithTag("Skull").FirstOrDefault();
+            if(child!= null)
+            {
+                child.GetComponent<SpriteRenderer>();
+                Debug.Log(child.GetComponent<SpriteRenderer>().material.color);
+            }
+            
+
+            if (gameObject.GetComponent<Renderer>().material.color == Color.white)
+            {
+                
+                gameObject.GetComponent<Renderer>().material.color = Color.black;
+                if(child != null)
+                child.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+            else if (gameObject.GetComponent<Renderer>().material.color == Color.black)
+            {
+                
+                gameObject.GetComponent<Renderer>().material.color = Color.white;
+                if (child != null)
+                    child.GetComponent<SpriteRenderer>().color = Color.black;
+            }
         }
 
         //if (isFirst == true)
@@ -161,8 +192,14 @@ public class Brick : MonoBehaviour
             ParticleSystem ps = bp.GetComponent<ParticleSystem>();
             ParticleSystem.MainModule psmain = ps.main;
             psmain.startColor = brickColor;
+            if (gameObject.name == "Cube Skull(Clone)")
+            {
 
-            if(Direction == moveDirection.Left && brickColor != Color.white || Direction == moveDirection.Right && brickColor != Color.black)
+
+               LevelManager.ReverseColor = true;
+                Debug.Log("HAHA");
+            }
+            if (Direction == moveDirection.Left && brickColor != Color.white || Direction == moveDirection.Right && brickColor != Color.black)
             {
                 psmain.startColor = Color.red;
                 isWrong = true;
@@ -176,7 +213,7 @@ public class Brick : MonoBehaviour
                 Score.scoreValue++;
                 //LevelManager.Touching = false;
             }
-
+            
             //if (collision.gameObject.tag == "Brick")
             //{
             //    Debug.Log("XXX");
@@ -199,10 +236,29 @@ public class Brick : MonoBehaviour
 
     }
 
-    //void CheckFirst()
-    //{
-        
-    //}
+    
 
 
+}
+
+public static class TransformExtensions
+{
+    public static List<GameObject> FindObjectsWithTag(this Transform parent, string tag)
+    {
+        List<GameObject> taggedGameObjects = new List<GameObject>();
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            if (child.tag == tag)
+            {
+                taggedGameObjects.Add(child.gameObject);
+            }
+            if (child.childCount > 0)
+            {
+                taggedGameObjects.AddRange(FindObjectsWithTag(child, tag));
+            }
+        }
+        return taggedGameObjects;
+    }
 }

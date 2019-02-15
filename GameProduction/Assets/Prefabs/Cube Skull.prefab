@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 246423976377295556}
   m_Layer: 0
   m_Name: UI_Icon_Skull
-  m_TagString: Untagged
+  m_TagString: Skull
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
