@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LoseMenu : MonoBehaviour
 {
-    bool isLose;
+    public static bool isLose;
     public GameObject loseMenuCanvas;
     // Start is called before the first frame update
 

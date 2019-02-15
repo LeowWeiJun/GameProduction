@@ -16,13 +16,23 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
 
 
-    public static int initialLife = 1;
+    public static int initialLife = 100;
     public static int Life;
     int EventNo;
 
+    public static readonly int WhiteChance = 35;
+    public static readonly int BlackChance = 35;
+    public static readonly int SkullChance = 30;
+    public static readonly int TotalChance = WhiteChance + BlackChance + SkullChance;
+
+
+
+    public GameObject whiteBrick;
+    public GameObject blackBrick;
+    public GameObject skullBrick;
 
     public static List<GameObject> Bricks;
-    public GameObject brick;  
+    //public GameObject brick;  
     private GameObject brickClone;
     public float spawnSpeed;
     //float directionY;
@@ -30,10 +40,11 @@ public class LevelManager : MonoBehaviour
 
     public static int initialBricks = 8;
     int counter;
+    public static int wrongCounter = 0;
     Color[] colors = new Color[2];
 
-     
 
+   // public static bool Touching = false;
     public GameObject progressBar;
     //public GameObject powerUP;
     private void Awake()
@@ -87,11 +98,15 @@ public class LevelManager : MonoBehaviour
 
     }
 
+    private void FixedUpdate()
+    {
+        
+    }
     // Update is called once per frame
     void Update()
     {
-        
 
+        //Debug.Log(Touching);
         if (doingSetup)
             return;
 
@@ -101,6 +116,13 @@ public class LevelManager : MonoBehaviour
             completelevel++;
             OnLoadNewLevel();
         }
+
+        //if(Brick.isWrong == true)
+        //{
+        //    Brick.isWrong = false;
+        //    instantiateBricks();
+        //    instantiateBricks();
+        //}
             
 
     }
@@ -134,15 +156,30 @@ public class LevelManager : MonoBehaviour
 
         while (counter != 0)
         {
-            Debug.Log("Hello");
+            //Debug.Log("Hello");
             //Debug.Log("Bam");
             yield return new WaitForSeconds(waitTime);
-            brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
-            //Instantiate(BrickClone);
 
-            int x = Random.Range(0, 1);
-            brickClone.GetComponent<Renderer>().material.color = colors[Random.Range(0, colors.Length)];
-            Bricks.Add(brickClone);
+            instantiateBricks();
+             //rb = GetComponent<Rigidbody2D>();
+             //rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);
+             //Debug.Log(Bricks);
+             //Debug.Log(Bricks[0]);
+             //foreach(var human in Bricks)
+             //{
+             //    Debug.Log(human);
+             //}
+             counter--;
+            //if(counter == 0)
+               // yield return new WaitForSeconds(2.0f);
+        }
+
+        
+
+        while (counter == 0 && LoseMenu.isLose != true)
+        {
+            //Debug.Log("Hello");
+
             //rb = GetComponent<Rigidbody2D>();
             //rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);
             //Debug.Log(Bricks);
@@ -151,7 +188,72 @@ public class LevelManager : MonoBehaviour
             //{
             //    Debug.Log(human);
             //}
-            counter--;
+
+
+            if (wrongCounter != 0 && Brick.isWrong == true)
+            {
+                Debug.Log("Wrong");
+                yield return new WaitForSeconds(0.15f);
+
+                instantiateBricks();
+                wrongCounter--;
+
+                if (wrongCounter == 0)
+                {
+                    Brick.isWrong = false;
+                }
+                if (wrongCounter % 2 == 0)
+                {
+                    //Brick.isWrong = false;
+                    yield return new WaitForSeconds(0.5f);
+                }
+                
+                    
+            }
+            else if (Brick.isWrong == false)
+            {
+                Debug.Log("Normal");
+                yield return new WaitForSeconds(0.2f);
+                instantiateBricks();
+                //yield return new WaitForSeconds(2f);
+
+            }
+ 
+        }
+
+        
+
+    }
+
+    public void instantiateBricks()
+    {
+
+         int x = Random.Range(0, TotalChance);
+
+            if ((x -= WhiteChance) < 0)
+            {
+                brickClone = Instantiate(whiteBrick, new Vector3(0, 300, -1), Quaternion.identity) as GameObject;
+            }
+            else if ((x -= BlackChance) < 0)
+            {
+                brickClone = Instantiate(blackBrick, new Vector3(0, 300, -1), Quaternion.identity) as GameObject;
+            }
+            else
+            {
+                brickClone = Instantiate(skullBrick, new Vector3(0, 300, -1), Quaternion.identity) as GameObject;
+            }
+            //brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
+            ////Instantiate(BrickClone);
+
+            //int x = Random.Range(0, 1);
+            //brickClone.GetComponent<Renderer>().material.color = colors[Random.Range(0, colors.Length)];
+            Bricks.Add(brickClone);
+    }
+
+    public void Mistake()
+    {
+        for (int i = 0; i<2; i++)
+        {
 
         }
     }

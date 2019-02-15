@@ -1,16 +1,28 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InstantiateBrick : MonoBehaviour
 {
     public static List<GameObject> Bricks;
-    
+    public static readonly int WhiteChance = 35;
+    public static readonly int BlackChance = 35;
+    public static readonly int SkullChance = 30;
+    public static readonly int TotalChance = WhiteChance + BlackChance + SkullChance;
+
+
+
+    public GameObject whiteBrick;
+    public GameObject blackBrick;
+    public GameObject skullBrick;
     public GameObject brick;
     private GameObject brickClone;
     public float spawnSpeed;
     //float directionY;
     Rigidbody2D rb;
+
+
 
     int counter = 10;
     Color[] colors = new Color[2];
@@ -70,14 +82,29 @@ public class InstantiateBrick : MonoBehaviour
 
         if (counter != 0 )
         {
+            
+
             Debug.Log("Hello");
             //Debug.Log("Bam");
             yield return new WaitForSeconds(waitTime);
-            brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
+
             //Instantiate(BrickClone);
-            
-            int x = Random.Range(0, 1);
-            brickClone.GetComponent<Renderer>().material.color = colors[Random.Range(0, colors.Length)];
+            int x = Random.Range(0, TotalChance);
+
+            if ((x -= WhiteChance) < 0)
+            {
+                brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
+            }
+            else if ((x -= BlackChance) < 0)
+            {
+                brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
+            }
+            else
+            {
+                brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
+            }
+            //int x = Random.Range(0, 1);
+            //brickClone.GetComponent<Renderer>().material.color = colors[Random.Range(0, colors.Length)];
             Bricks.Add(brickClone);
             //rb = GetComponent<Rigidbody2D>();
             //rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);

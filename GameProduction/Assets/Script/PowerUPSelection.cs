@@ -19,7 +19,7 @@ public class PowerUPSelection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isSelect)
+        if (isSelect && LoseMenu.isLose != true)
         {
             PowerupsSelectCanvas.SetActive(true);
             Time.timeScale = 0.0f;

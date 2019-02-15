@@ -32,9 +32,10 @@ public class Brick : MonoBehaviour
     //public LevelManager instaScript;
     public GameObject test;
 
-
+    public static bool isWrong = false; 
     float damp = 0.1f;
 
+    
 
     private void Awake()
     {
@@ -59,6 +60,7 @@ public class Brick : MonoBehaviour
 
     void FixedUpdate()
     {
+        //if(rb.bodyType != RigidbodyType2D.Static)
         rb.velocity = Vector3.Scale(rb.velocity, new Vector3(1, 1 - damp, 1));
         //rb.MovePosition(rb.position + Vector2.down *speed* Time.deltaTime);
         //Debug.Log("Heh");
@@ -68,7 +70,7 @@ public class Brick : MonoBehaviour
         //    return;
 
         //currentVelocity.y = 0f;
-
+        
         //rb.velocity = currentVelocity;
         if (isSwipe == true && LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject)
         {
@@ -76,6 +78,14 @@ public class Brick : MonoBehaviour
             isFirst = true;
             SwipeManager.Instance.Direction = SwipeDirection.None;
         }
+
+        //if (isFirst == true)
+        //{
+        //    Debug.Log(rb.bodyType);
+        //    rb.bodyType = RigidbodyType2D.Dynamic;
+        //    Debug.Log(rb.bodyType);
+        //}
+            
 
         if (Direction == moveDirection.Down || isFirst != true)//LevelManager.Bricks[0].gameObject != gameObject)
         {
@@ -87,11 +97,13 @@ public class Brick : MonoBehaviour
             //rb.AddTorque(50.0f);
             rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
             //rb.MoveRotation(rb.rotation + 50.0f * Time.fixedDeltaTime);
+            //LevelManager.Touching = false;
 
         }
         else if (Direction == moveDirection.Right && isFirst == true)//LevelManager.Bricks[0].gameObject == gameObject)
         {
             rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
+            //LevelManager.Touching = false;
 
         }
 
@@ -106,7 +118,10 @@ public class Brick : MonoBehaviour
         //  transform.Translate(Vector2.down * speed * Time.deltaTime);
 
 
-
+        //if (rb.velocity.y <= 0.0f)
+        //{
+        //    rb.Sleep();
+        //}
 
         if (LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject && isSwipe == false)
         {
@@ -125,13 +140,14 @@ public class Brick : MonoBehaviour
             }
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         
-        rb.velocity = new Vector3(0, 0,0);
+        //rb.velocity = new Vector3(0, 0,0);
         if (collision.gameObject.name == "Boundary" && isFirst == true)
         {
+           // LevelManager.Touching = true;
+            //rb.bodyType = RigidbodyType2D.Dynamic;
             Debug.Log("Collided");
             //Debug.Log(LevelManager.Bricks[0].gameObject);
             Vector3 particlepos = transform.position;
@@ -149,15 +165,38 @@ public class Brick : MonoBehaviour
             if(Direction == moveDirection.Left && brickColor != Color.white || Direction == moveDirection.Right && brickColor != Color.black)
             {
                 psmain.startColor = Color.red;
+                isWrong = true;
+                
+                LevelManager.wrongCounter += 2;
                 LevelManager.Life--;
+                //LevelManager.Touching = false;
             }
             else
             {
                 Score.scoreValue++;
+                //LevelManager.Touching = false;
             }
 
-            
+            //if (collision.gameObject.tag == "Brick")
+            //{
+            //    Debug.Log("XXX");
+            //    //rb.velocity = new Vector3(0, 0, 0);
+            //    rb.bodyType = RigidbodyType2D.Static;
+            //}
         }
+        
+        //if (collision.gameObject.tag == "Brick" && LevelManager.Touching == true && isFirst!= true)
+        //{
+        //    //Debug.Log("XXX");
+        //    //rb.velocity = new Vector3(0, 0, 0);
+        //    rb.bodyType = RigidbodyType2D.Static;
+        //}
+        //else
+        //{
+        //    rb.bodyType = RigidbodyType2D.Dynamic;
+        //}
+
+
     }
 
     //void CheckFirst()
