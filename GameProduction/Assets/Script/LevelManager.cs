@@ -45,6 +45,8 @@ public class LevelManager : MonoBehaviour
     public static  int BlackChance = 45;
     public static  int whiteSkullChance = 5;
     public static  int blackSkullChance = 5;
+    public static int whiteClockChance = 0;
+    public static int blackClockChance = 0;
     public static  int TotalChance = WhiteChance + BlackChance + whiteSkullChance + blackSkullChance;
 
 
@@ -53,6 +55,8 @@ public class LevelManager : MonoBehaviour
     public GameObject blackBrick;
     public GameObject whiteSkullBrick;
     public GameObject blackSkullBrick;
+    public GameObject whiteClockBrick;
+    public GameObject blackClockBrick;
 
     public static List<GameObject> Bricks;
     //public GameObject brick;  

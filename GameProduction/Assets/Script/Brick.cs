@@ -249,6 +249,13 @@ public class Brick : MonoBehaviour
             else
             {
                 Score.scoreValue++;
+
+                if (gameObject.name == "White Clock(Clone)" || gameObject.name == "Black Clock(Clone)")
+                {
+                    LevelManager.audioSourceSFX.PlayOneShot(LevelManager.skullBrick, LevelManager.audioSourceSFX.volume);
+                    LevelManager.ReverseColor = true;
+                    //Debug.Log("HAHA");
+                }
                 //LevelManager.Touching = false;
             }
             
