@@ -12,7 +12,7 @@ public class ProgressBar : MonoBehaviour
     static float time;
 
     public static bool isTimeUp;
-    public static float initialTime = 2500000;
+    public static float initialTime = 20;
 
     public TextMeshProUGUI timeText;
     //[SerializeField]private float currentAmount;
@@ -29,7 +29,7 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (LevelManager.doingSetup)
+        if (LevelManager.doingSetup || MenuStats.IsTutorial == 1)
             return;
 
         if (time > 0)

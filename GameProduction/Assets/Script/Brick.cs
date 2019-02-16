@@ -15,6 +15,7 @@ public enum moveDirection
 
 public class Brick : MonoBehaviour
 {
+    bool isPlayed = false;
     //private bool dirDown = true;
     public float downSpeed;
     public float horizSpeed;
@@ -23,7 +24,7 @@ public class Brick : MonoBehaviour
     //private Vector2 velocity;
     public moveDirection Direction { set; get; }
     // Start is called before the first frame update
-
+    
     public GameObject brickParticle;
     public Color brickColor;
     private ParticleSystem ps;
@@ -47,7 +48,8 @@ public class Brick : MonoBehaviour
     }
     void Start()
     {
-      //  velocity = new Vector2(1.75f, 1.1f);
+        
+        //  velocity = new Vector2(1.75f, 1.1f);
         rb = gameObject.GetComponent<Rigidbody2D>();
         Direction = moveDirection.Down;
         //instaScript = GetComponent<LevelManager>();
@@ -90,7 +92,7 @@ public class Brick : MonoBehaviour
             if(child!= null)
             {
                 child.GetComponent<SpriteRenderer>();
-                Debug.Log(child.GetComponent<SpriteRenderer>().material.color);
+                //Debug.Log(child.GetComponent<SpriteRenderer>().material.color);
             }
             
 
@@ -153,33 +155,69 @@ public class Brick : MonoBehaviour
         //{
         //    rb.Sleep();
         //}
+        
+            if (LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject && isSwipe == false)
+            {
+                if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
+                {
+                    Direction = moveDirection.Left;
+                    isSwipe = true;
+                    //CheckFirst();
+                    //transform.Translate(Vector2.left * speed * Time.deltaTime);
+                }
+                if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
+                {
+                    Direction = moveDirection.Right;
+                    isSwipe = true;
+                    //CheckFirst();
+                }
+            }
 
-        if (LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject && isSwipe == false)
-        {
-            if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
+            if (LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject && isSwipe == false)
             {
-                Direction = moveDirection.Left;
-                isSwipe = true;
-                //CheckFirst();
-                //transform.Translate(Vector2.left * speed * Time.deltaTime);
+                if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
+                {
+                    Direction = moveDirection.Left;
+                    isSwipe = true;
+                    //CheckFirst();
+                    //transform.Translate(Vector2.left * speed * Time.deltaTime);
+                }
+                if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
+                {
+                    Direction = moveDirection.Right;
+                    isSwipe = true;
+                    //CheckFirst();
+                }
             }
-            if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
-            {
-                Direction = moveDirection.Right;
-                isSwipe = true;
-                //CheckFirst();
-            }
-        }
+        
+        
+            
+
+        
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
-        
+        //if(LevelManager.isTutorial == true)
+        //{
+        //    if(LevelManager.Bricks[2].gameObject == gameObject)
+        //    {
+
+        //        //Time.timeScale = 0.0f;
+                
+        //        return;
+        //    }
+        //}
+
+        if(isPlayed == false)
+            LevelManager.audioSourceSFX.PlayOneShot(LevelManager.fallBrick, LevelManager.audioSourceSFX.volume);
+        isPlayed = true;
         //rb.velocity = new Vector3(0, 0,0);
         if (collision.gameObject.name == "Boundary" && isFirst == true)
         {
-           // LevelManager.Touching = true;
+            brickColor = gameObject.GetComponent<Renderer>().material.color;
+            // LevelManager.Touching = true;
             //rb.bodyType = RigidbodyType2D.Dynamic;
-            Debug.Log("Collided");
+            //Debug.Log("Collided");
             //Debug.Log(LevelManager.Bricks[0].gameObject);
             Vector3 particlepos = transform.position;
             //particleColor = LevelManager.Bricks[0].GetComponent<Renderer>().material.color;
@@ -192,12 +230,12 @@ public class Brick : MonoBehaviour
             ParticleSystem ps = bp.GetComponent<ParticleSystem>();
             ParticleSystem.MainModule psmain = ps.main;
             psmain.startColor = brickColor;
-            if (gameObject.name == "Cube Skull(Clone)")
+            if (gameObject.name == "White Skull(Clone)" || gameObject.name == "Black Skull(Clone)")
             {
 
-
-               LevelManager.ReverseColor = true;
-                Debug.Log("HAHA");
+                LevelManager.audioSourceSFX.PlayOneShot(LevelManager.skullBrick, LevelManager.audioSourceSFX.volume);
+                LevelManager.ReverseColor = true;
+                //Debug.Log("HAHA");
             }
             if (Direction == moveDirection.Left && brickColor != Color.white || Direction == moveDirection.Right && brickColor != Color.black)
             {
@@ -205,7 +243,7 @@ public class Brick : MonoBehaviour
                 isWrong = true;
                 
                 LevelManager.wrongCounter += 2;
-                LevelManager.Life--;
+                //LevelManager.Life--;
                 //LevelManager.Touching = false;
             }
             else
@@ -236,6 +274,7 @@ public class Brick : MonoBehaviour
 
     }
 
+    
     
 
 

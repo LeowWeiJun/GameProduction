@@ -31,9 +31,10 @@ public class LoseMenu : MonoBehaviour
         //{
         //    isLose = !isLose;
         //}
-        if(ProgressBar.isTimeUp == true || LevelManager.Life == 0)
+        if(MenuStats.IsTutorial != 1 && (ProgressBar.isTimeUp == true || LevelManager.Life == 0))
         {
             isLose = true;
+            LevelManager.audioSource.clip = LevelManager.LoseTrack;
         }
     }
 

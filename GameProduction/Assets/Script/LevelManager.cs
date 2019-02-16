@@ -3,9 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    //public List<int> number = new List<int>() { 1, 1, 1 };
+    //public static int isTutorial;
+    
+    int y = 0;
+    public GameObject HandSymbol;
+
+    public GameObject swipeLeft;
+    public GameObject swipeRight;
+    public GameObject Next;
+    public GameObject Startbtn;
+    public GameObject TutPanel;
+
+
+    public static AudioSource audioSourceSFX;
+    public static AudioClip fallBrick;
+    public static AudioClip skullBrick;
+    public static AudioClip LoseTrack;
+    public static AudioClip GameTrack;
+    //public static AudioSource audiosourceSFX;
+    public static AudioSource audioSource;
     public float levelStartDelay;
     
     public TextMeshProUGUI levelText;
@@ -20,16 +41,18 @@ public class LevelManager : MonoBehaviour
     public static int Life;
     int EventNo;
 
-    public static readonly int WhiteChance = 35;
-    public static readonly int BlackChance = 35;
-    public static readonly int SkullChance = 30;
-    public static readonly int TotalChance = WhiteChance + BlackChance + SkullChance;
+    public static  int WhiteChance = 45;
+    public static  int BlackChance = 45;
+    public static  int whiteSkullChance = 5;
+    public static  int blackSkullChance = 5;
+    public static  int TotalChance = WhiteChance + BlackChance + whiteSkullChance + blackSkullChance;
 
 
-
+    public float distance;
     public GameObject whiteBrick;
     public GameObject blackBrick;
-    public GameObject skullBrick;
+    public GameObject whiteSkullBrick;
+    public GameObject blackSkullBrick;
 
     public static List<GameObject> Bricks;
     //public GameObject brick;  
@@ -43,23 +66,62 @@ public class LevelManager : MonoBehaviour
     public static int wrongCounter = 0;
     Color[] colors = new Color[2];
 
+
+    Coroutine spawner;
+    Coroutine Mistakespawner;
     public static bool ReverseColor = false;
     // public static bool Touching = false;
     public GameObject progressBar;
     //public GameObject powerUP;
     private void Awake()
     {
-        Life = initialLife;
-        level = 1;
-        completelevel = 0;
-        levelStartDelay = 2.0f;
-        InitGame();
+        if (MenuStats.IsTutorial == 1)
+        {
+            Time.timeScale = 0;
+            swipeLeft.SetActive(true);
+        }
+        else
+        {
+            TutPanel.SetActive(false);
+            Life = initialLife;
+            level = 1;
+            completelevel = 0;
+            levelStartDelay = 2.0f;
+            InitGame();
+            progressBar = GameObject.Find("ProgressBar");
+        }
+
+        fallBrick = Resources.Load<AudioClip>("SFX/hero_land_soft");
+        LoseTrack = Resources.Load<AudioClip>("BGM/Boss Defeat");
+        skullBrick = Resources.Load<AudioClip>("SFX/focus_health_heal");
+        GameTrack = Resources.Load<AudioClip>("BGM/Hollow Knight OST - City of Tears");
+
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = MenuStats.BgmVol;
+        audioSource.clip = GameTrack;
+        audioSource.Play();
+
+        Debug.Log(MenuStats.BgmVol);
+        Debug.Log(MenuStats.SfxVol);
+        audioSourceSFX = GetComponent<AudioSource>();
+        audioSourceSFX.volume = MenuStats.SfxVol;
+        //Life = initialLife;
+        //level = 1;
+        //completelevel = 0;
+        //levelStartDelay = 2.0f;
+        //InitGame();
+
     }
     void Start()
     {
+        
+        
 
         
-        progressBar = GameObject.Find("ProgressBar");
+
+        //audiosourceSFX.volume = MenuStats.SfxVol;
+        
+        //HandSymbol = GameObject.Find("HandSwipe");
         Bricks = new List<GameObject>();
         spawnSpeed = 0.15f;
         colors[0] = Color.white;
@@ -94,8 +156,8 @@ public class LevelManager : MonoBehaviour
         levelImage.SetActive(false);
         doingSetup = false;
         //Time.timeScale = 1f;
-        StartCoroutine(SpawnBricks(spawnSpeed));
-        StartCoroutine(Mistake());
+        spawner = StartCoroutine(SpawnBricks(spawnSpeed));
+        Mistakespawner = StartCoroutine(Mistake());
 
     }
 
@@ -108,82 +170,69 @@ public class LevelManager : MonoBehaviour
     {
 
         //Debug.Log(Touching);
-        if (doingSetup)
+        if (doingSetup || MenuStats.IsTutorial == 1)
             return;
 
-        if (GameObject.FindGameObjectWithTag("Brick") == null && counter == 0)
+        if (GameObject.FindGameObjectWithTag("Brick") == null && counter == 0 && wrongCounter <= 0)
         {
+            wrongCounter = 0;
+            StopCoroutine(spawner);
+            StopCoroutine(Mistakespawner);
             Debug.Log("NO BRICKS");
             completelevel++;
             OnLoadNewLevel();
         }
-        //Debug.Log(Brick.isWrong);
-        //Mistake();
-        //if(Brick.isWrong == true)
-        //{
-        //    Brick.isWrong = false;
-        //    instantiateBricks();
-        //    instantiateBricks();
-        //}
-
 
     }
 
     void OnLoadNewLevel()
     {
+        if(level% 2 == 0)
+        {
+            whiteSkullChance += 2;
+            blackSkullChance += 2;
+        }
         if(level % 5 == 0)
         {
-            PowerUPSelection.isSelect = true;
+            //PowerUPSelection.isSelect = true;
             //powerUP.SetActive(true);
-            Time.timeScale = 0.0f;
+            //Time.timeScale = 0.0f;
             EventNo = Random.Range(0, 1);
             EventHandle(EventNo);
 
-            
-            //progressBar.SetActive(false);
-            //progressBar.SetActive(true);
-            //progressBar.GetComponent<ProgressBar>().enabled = false;
-            //progressBar.GetComponent<ProgressBar>().enabled = true;
-        }
+            initialBricks += 1;
 
+        }
+        ProgressBar.ResetTime();
         level++;
-        counter = 10;
+
         InitGame();
     }
     public IEnumerator SpawnBricks(float waitTime)
     {
 
-        Debug.Log(LevelManager.doingSetup);
+        //Debug.Log(LevelManager.doingSetup);
 
 
         while (counter != 0)
         {
-            //Debug.Log("Hello");
-            //Debug.Log("Bam");
+
             yield return new WaitForSeconds(waitTime);
 
             instantiateBricks();
-             //rb = GetComponent<Rigidbody2D>();
-             //rb.MovePosition(rb.position + Vector2.down * Time.deltaTime);
-             //Debug.Log(Bricks);
-             //Debug.Log(Bricks[0]);
-             //foreach(var human in Bricks)
-             //{
-             //    Debug.Log(human);
-             //}
+
              counter--;
-            //if(counter == 0)
-               // yield return new WaitForSeconds(2.0f);
+
         }
 
         
 
-        while (counter == 0 && LoseMenu.isLose != true)
+        while (counter == 0 && LoseMenu.isLose != true && doingSetup == false)
         {
             
 
-                //yield return new WaitForSeconds(20f);
-                //instantiateBricks();
+                yield return new WaitForSeconds(2f);
+                instantiateBricks();
 
         }
 
@@ -191,29 +240,36 @@ public class LevelManager : MonoBehaviour
 
     }
 
+
     public void instantiateBricks()
     {
-
+        if (Bricks != null || Bricks.Count == 1)
+        {
+            distance = 6;
+        }
+        else
+        {
+            distance = (Bricks.Count - 2) * 0.5f + 6;
+        }
          int x = Random.Range(0, TotalChance);
 
             if ((x -= WhiteChance) < 0)
             {
-                brickClone = Instantiate(whiteBrick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
+                brickClone = Instantiate(whiteBrick, new Vector3(0, distance, -1), Quaternion.identity) as GameObject;
             }
             else if ((x -= BlackChance) < 0)
             {
-                brickClone = Instantiate(blackBrick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
+                brickClone = Instantiate(blackBrick, new Vector3(0, distance, -1), Quaternion.identity) as GameObject;
+            }
+            else if((x-= whiteSkullChance)< 0)
+            {
+                brickClone = Instantiate(whiteSkullBrick, new Vector3(0, distance, -1), Quaternion.identity) as GameObject;
             }
             else
             {
-                brickClone = Instantiate(skullBrick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
+                brickClone = Instantiate(blackSkullBrick, new Vector3(0, distance, -1), Quaternion.identity) as GameObject;
             }
-            //brickClone = Instantiate(brick, new Vector3(0, 6, -1), Quaternion.identity) as GameObject;
-            ////Instantiate(BrickClone);
-
-            //int x = Random.Range(0, 1);
-            //brickClone.GetComponent<Renderer>().material.color = colors[Random.Range(0, colors.Length)];
-            Bricks.Add(brickClone);
+        Bricks.Add(brickClone);
     }
 
     public IEnumerator Mistake()
@@ -221,15 +277,16 @@ public class LevelManager : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(0.15f);
-            while (Brick.isWrong == true)
+            while (Brick.isWrong == true && wrongCounter > 0)
             {
-                
 
+                yield return new WaitForSeconds(0.15f);
                 instantiateBricks();
                 wrongCounter--;
-                Debug.Log(wrongCounter);
-                if (wrongCounter == 0)
+                //Debug.Log(wrongCounter);
+                if (wrongCounter <= 0)
                 {
+                    wrongCounter = 0;
                     Brick.isWrong = false;
 
                 }
@@ -246,4 +303,26 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void NextTut()
+    {
+        swipeLeft.SetActive(false);
+        swipeRight.SetActive(true);
+        Next.SetActive(false);
+        Startbtn.SetActive(true);
+    }
+
+    public void StartPlay()
+    {
+        swipeRight.SetActive(false);
+        Startbtn.SetActive(false);
+        TutPanel.SetActive(false);
+        MenuStats.IsTutorial += 1;
+
+        Life = initialLife;
+        level = 1;
+        completelevel = 0;
+        levelStartDelay = 2.0f;
+        InitGame();
+        progressBar = GameObject.Find("ProgressBar");
+    }
 }
