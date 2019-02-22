@@ -79,21 +79,21 @@ public class LevelManager : MonoBehaviour
     //public GameObject powerUP;
     private void Awake()
     {
-        if (MenuStats.IsTutorial == 1)
-        {
-            Time.timeScale = 0;
-            swipeLeft.SetActive(true);
-        }
-        else
-        {
-            TutPanel.SetActive(false);
+        //if (MenuStats.IsTutorial == 1)
+        //{
+        //    Time.timeScale = 0;
+        //    swipeLeft.SetActive(true);
+        //}
+        //else
+        //{
+            //TutPanel.SetActive(false);
             Life = initialLife;
             level = 1;
             completelevel = 0;
             levelStartDelay = 2.0f;
             InitGame();
             progressBar = GameObject.Find("ProgressBar");
-        }
+        //}
 
         fallBrick = Resources.Load<AudioClip>("SFX/hero_land_soft");
         LoseTrack = Resources.Load<AudioClip>("BGM/Boss Defeat");
@@ -105,8 +105,8 @@ public class LevelManager : MonoBehaviour
         audioSource.clip = GameTrack;
         audioSource.Play();
 
-        Debug.Log(MenuStats.BgmVol);
-        Debug.Log(MenuStats.SfxVol);
+        //Debug.Log(MenuStats.BgmVol);
+        //Debug.Log(MenuStats.SfxVol);
         audioSourceSFX = GetComponent<AudioSource>();
         audioSourceSFX.volume = MenuStats.SfxVol;
         //Life = initialLife;
@@ -229,9 +229,15 @@ public class LevelManager : MonoBehaviour
 
         }
 
-        
+        Debug.Log(counter);
+        Debug.Log(MenuStats.IsTutorial);
 
-        while (counter == 0 && LoseMenu.isLose != true && doingSetup == false)
+        while (counter == 0 && MenuStats.IsTutorial == 1)
+        {
+            //swipeLeft.SetActive(true);
+        }
+
+        while (counter == 0 && LoseMenu.isLose != true && doingSetup == false && MenuStats.IsTutorial != 1)
         {
             
 

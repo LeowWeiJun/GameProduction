@@ -128,6 +128,7 @@ public class Brick : MonoBehaviour
         else if (Direction == moveDirection.Left && isFirst == true)//LevelManager.Bricks[0].gameObject == gameObject)
         {
             //rb.AddTorque(50.0f);
+            if(MenuStats.IsTutorial == 1) { }
             rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
             //rb.MoveRotation(rb.rotation + 50.0f * Time.fixedDeltaTime);
             //LevelManager.Touching = false;
