@@ -22,7 +22,9 @@ public class MainMenu : MonoBehaviour
     public AudioSource audioSourceSFX;
     private void Awake()
     {
-        MenuStats.IsTutorial += 1;
+        if(MenuStats.IsTutorial != -1)
+            MenuStats.IsTutorial = 1;
+
         //Debug.Log(MenuStats.IsTutorial);
         SFXArr = Resources.LoadAll<Sprite>("SFX");
         BGMArr = Resources.LoadAll<Sprite>("BGM");

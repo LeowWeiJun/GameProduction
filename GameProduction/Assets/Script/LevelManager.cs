@@ -15,6 +15,8 @@ public class LevelManager : MonoBehaviour
 
     public GameObject swipeLeft;
     public GameObject swipeRight;
+    public bool swipeLeftActive = false;
+    public bool swipeRightActive = false;
     public GameObject Next;
     public GameObject Startbtn;
     public GameObject TutPanel;
@@ -174,7 +176,7 @@ public class LevelManager : MonoBehaviour
     {
 
         //Debug.Log(Touching);
-        if (doingSetup || MenuStats.IsTutorial == 1)
+        if (doingSetup || MenuStats.IsTutorial >= 1)
             return;
 
         if (GameObject.FindGameObjectWithTag("Brick") == null && counter == 0 && wrongCounter <= 0)
@@ -232,12 +234,24 @@ public class LevelManager : MonoBehaviour
         Debug.Log(counter);
         Debug.Log(MenuStats.IsTutorial);
 
-        while (counter == 0 && MenuStats.IsTutorial == 1)
+        while (counter == 0 && MenuStats.IsTutorial >= 1)
         {
-            //swipeLeft.SetActive(true);
+            if (swipeLeftActive == true && swipeRightActive == true)
+                break;
+            if(Bricks[0].GetComponent<Renderer>().material.color == Color.white && swipeLeftActive == false)
+            {
+                swipeLeft.SetActive(true);
+                swipeLeftActive = true;
+            }
+            else if(Bricks[0].GetComponent<Renderer>().material.color == Color.black && swipeRightActive == false)
+            {
+                swipeRight.SetActive(true);
+                swipeRightActive = true;
+            }
+            
         }
 
-        while (counter == 0 && LoseMenu.isLose != true && doingSetup == false && MenuStats.IsTutorial != 1)
+        while (counter == 0 && LoseMenu.isLose != true && doingSetup == false && MenuStats.IsTutorial == -1)
         {
             
 
