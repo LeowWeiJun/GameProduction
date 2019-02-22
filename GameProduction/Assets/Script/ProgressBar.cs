@@ -29,7 +29,7 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (LevelManager.doingSetup || MenuStats.IsTutorial >= 1)
+        if (LevelManager.doingSetup || MenuStats.IsTutorial == 1)
             return;
 
         if (time > 0)

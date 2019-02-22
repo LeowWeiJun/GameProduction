@@ -29,7 +29,7 @@ public class Brick : MonoBehaviour
     public Color brickColor;
     private ParticleSystem ps;
 
-    bool isSwipe;
+    static bool isSwipe;
     bool isFirst;
     static bool isNotSwiped = false;
     //public LevelManager instaScript;
@@ -40,6 +40,8 @@ public class Brick : MonoBehaviour
 
     public GameObject swipeLeft;
     public GameObject swipeRight;
+    public static bool TutSwipeLeft = false;
+    public static bool TutSwipeRight = false;
 
     private void Awake()
     {
@@ -83,12 +85,18 @@ public class Brick : MonoBehaviour
 
         //rb.velocity = currentVelocity;
 
-        
+        //if(LevelManager.Bricks[0].gameObject == gameObject)
+        //{
+        //    Debug.Log(isFirst);
+        //    Debug.Log(gameObject.GetComponent<Renderer>().material.color);
+        //}
 
+        //Debug.Log(isSwipe);
         if (isSwipe == true && LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject)
         {
             LevelManager.Bricks.Remove(LevelManager.Bricks[0]);
             isFirst = true;
+            isSwipe = false;
             SwipeManager.Instance.Direction = SwipeDirection.None;
         }
 
@@ -138,21 +146,26 @@ public class Brick : MonoBehaviour
         else if (Direction == moveDirection.Left && isFirst == true)//LevelManager.Bricks[0].gameObject == gameObject)
         {
             //rb.AddTorque(50.0f);
-            if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.white)
-            {
+            //if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.white)
+            //{
+            //    rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
+                
+                    
+            //    //isSwipe = true;
+            //}
+            //else if(MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.black)
+            //{
+            //    //isNotSwiped = true;
+            //}
+            //else
+            //{
+                if (LevelManager.swipeLeftActive == true && GameObject.Find("SwipeLeft") != null)
+                {
+                    swipeLeft = GameObject.Find("SwipeLeft");
+                    swipeLeft.SetActive(false);
+                }
                 rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
-                swipeLeft = GameObject.Find("SwipeLeft");
-                swipeLeft.SetActive(false);
-                isSwipe = true;
-            }
-            else if(MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.black)
-            {
-                //isNotSwiped = true;
-            }
-            else
-            {
-                rb.MovePosition(rb.position + Vector2.left * horizSpeed * Time.fixedDeltaTime);
-            }
+            //}
             
             //rb.MoveRotation(rb.rotation + 50.0f * Time.fixedDeltaTime);
             //LevelManager.Touching = false;
@@ -160,21 +173,28 @@ public class Brick : MonoBehaviour
         }
         else if (Direction == moveDirection.Right && isFirst == true)//LevelManager.Bricks[0].gameObject == gameObject)
         {
-            if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.black)
-            {
+            //if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.black)
+            //{
+                
+            //    rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
+
+                
+                
+            //    //isSwipe = true;
+            //}
+            //else if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.white)
+            //{
+            //    //isNotSwiped = true;
+            //}
+            //else
+            //{
+                if (LevelManager.swipeRightActive == true && GameObject.Find("SwipeRight") != null)
+                {
+                    swipeRight = GameObject.Find("SwipeRight");
+                    swipeRight.SetActive(false);
+                }
                 rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
-                swipeRight = GameObject.Find("SwipeRight");
-                swipeRight.SetActive(false);
-                isSwipe = true;
-            }
-            else if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.white)
-            {
-                //isNotSwiped = true;
-            }
-            else
-            {
-                rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
-            }
+            //}
 
             //rb.MovePosition(rb.position + Vector2.right * horizSpeed * Time.fixedDeltaTime);
             //LevelManager.Touching = false;
@@ -202,17 +222,52 @@ public class Brick : MonoBehaviour
 
         if (LevelManager.Bricks.Count > 0 && LevelManager.Bricks[0].gameObject == gameObject && isSwipe == false)
         {
+            //Debug.Log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left))
             {
+                if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.black && LevelManager.swipeRightActive == true)
+                {
+                    SwipeManager.Instance.Direction = SwipeDirection.None;
+                    //LevelManager.swipeLeftActive = true;
+                    return;
+                }
+
+                if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.black && LevelManager.swipeLeftActive == true && LevelManager.swipeRightActive == true && TutSwipeLeft == false && TutSwipeRight == true)
+                {
+                    SwipeManager.Instance.Direction = SwipeDirection.None;
+                    //LevelManager.swipeLeftActive = true;
+                    return;
+                }
+
+                TutSwipeLeft = true;
+                Debug.Log("XX");
+                    //Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 Direction = moveDirection.Left;
-                //isSwipe = true;
+                isSwipe = true;
                 //CheckFirst();
                 //transform.Translate(Vector2.left * speed * Time.deltaTime);
             }
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right))
             {
+                if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.white && LevelManager.swipeLeftActive == true)
+                {
+                    SwipeManager.Instance.Direction = SwipeDirection.None;
+                    //LevelManager.swipeRightActive = true;
+                    return;
+                }
+
+                if (MenuStats.IsTutorial == 1 && gameObject.GetComponent<Renderer>().material.color == Color.white && LevelManager.swipeLeftActive == true && LevelManager.swipeRightActive == true && TutSwipeLeft == true && TutSwipeRight == false)
+                {
+                    SwipeManager.Instance.Direction = SwipeDirection.None;
+                    //LevelManager.swipeLeftActive = true;
+                    return;
+                }
+
+                TutSwipeRight = true;
+                Debug.Log("AA");
+                //Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 Direction = moveDirection.Right;
-                //isSwipe = true;
+                isSwipe = true;
                 //CheckFirst();
             }
         }

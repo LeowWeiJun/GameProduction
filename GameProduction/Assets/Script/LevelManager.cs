@@ -15,11 +15,12 @@ public class LevelManager : MonoBehaviour
 
     public GameObject swipeLeft;
     public GameObject swipeRight;
-    public bool swipeLeftActive = false;
-    public bool swipeRightActive = false;
+    public static bool swipeLeftActive = false;
+    public static bool swipeRightActive = false;
     public GameObject Next;
     public GameObject Startbtn;
     public GameObject TutPanel;
+    public GameObject TutStartPanel;
 
 
     public static AudioSource audioSourceSFX;
@@ -90,7 +91,7 @@ public class LevelManager : MonoBehaviour
         //{
             //TutPanel.SetActive(false);
             Life = initialLife;
-            level = 1;
+            level = 0;
             completelevel = 0;
             levelStartDelay = 2.0f;
             InitGame();
@@ -149,8 +150,13 @@ public class LevelManager : MonoBehaviour
         doingSetup = true;
         //levelImage = GameObject.Find("LevelImage");
         //levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
-        levelText.text = "Level " + level;
-        levelImage.SetActive(true);
+        if(MenuStats.IsTutorial == -1)
+        {
+            levelText.text = "Level " + level;
+            levelImage.SetActive(true);
+        }
+        
+        
         //Time.timeScale = 0f;
         Invoke("HideLevelImage", levelStartDelay);
     }
@@ -158,8 +164,11 @@ public class LevelManager : MonoBehaviour
     private void HideLevelImage()
     {
         //Debug.Log("HELLO WORLD");
-        
-        levelImage.SetActive(false);
+        if (MenuStats.IsTutorial == -1)
+        {
+            levelImage.SetActive(false);
+        }
+            
         doingSetup = false;
         //Time.timeScale = 1f;
         spawner = StartCoroutine(SpawnBricks(spawnSpeed));
@@ -176,11 +185,18 @@ public class LevelManager : MonoBehaviour
     {
 
         //Debug.Log(Touching);
-        if (doingSetup || MenuStats.IsTutorial >= 1)
+        if ((doingSetup || MenuStats.IsTutorial == 1) && GameObject.FindGameObjectWithTag("Brick") != null)
             return;
 
         if (GameObject.FindGameObjectWithTag("Brick") == null && counter == 0 && wrongCounter <= 0)
         {
+
+            if (MenuStats.IsTutorial == 1)
+            {
+                TutStartPanel.SetActive(true);
+                Time.timeScale = 0;
+            }
+               // MenuStats.IsTutorial = -1;
             wrongCounter = 0;
             StopCoroutine(spawner);
             StopCoroutine(Mistakespawner);
@@ -234,7 +250,7 @@ public class LevelManager : MonoBehaviour
         Debug.Log(counter);
         Debug.Log(MenuStats.IsTutorial);
 
-        while (counter == 0 && MenuStats.IsTutorial >= 1)
+        while (counter == 0 && MenuStats.IsTutorial == 1)
         {
             if (swipeLeftActive == true && swipeRightActive == true)
                 break;
@@ -242,13 +258,18 @@ public class LevelManager : MonoBehaviour
             {
                 swipeLeft.SetActive(true);
                 swipeLeftActive = true;
+
+                yield return new WaitForSeconds(1.0f);
             }
             else if(Bricks[0].GetComponent<Renderer>().material.color == Color.black && swipeRightActive == false)
             {
                 swipeRight.SetActive(true);
                 swipeRightActive = true;
+                yield return new WaitForSeconds(2.0f);
             }
-            
+            yield return new WaitForFixedUpdate();
+
+
         }
 
         while (counter == 0 && LoseMenu.isLose != true && doingSetup == false && MenuStats.IsTutorial == -1)
@@ -329,18 +350,15 @@ public class LevelManager : MonoBehaviour
 
     public void NextTut()
     {
-        swipeLeft.SetActive(false);
-        swipeRight.SetActive(true);
-        Next.SetActive(false);
-        Startbtn.SetActive(true);
+        TutStartPanel.SetActive(false);
+        InitGame();
     }
 
     public void StartPlay()
     {
-        swipeRight.SetActive(false);
-        Startbtn.SetActive(false);
-        TutPanel.SetActive(false);
-        MenuStats.IsTutorial += 1;
+        TutStartPanel.SetActive(false);
+
+        MenuStats.IsTutorial = -1;
 
         Life = initialLife;
         level = 1;
@@ -348,5 +366,10 @@ public class LevelManager : MonoBehaviour
         levelStartDelay = 2.0f;
         InitGame();
         progressBar = GameObject.Find("ProgressBar");
+    }
+
+    public void PauseGame()
+    {
+        PauseMenu.isPaused = true;
     }
 }
